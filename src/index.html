@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB" data-lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,9 @@
 
     <section class="panel-left">
       <h1 class="name">Enikő Lóránt</h1>
-      <p class="title">Actress</p>
+      <p class="title t" lang="en">Actress</p>
+      <p class="title t" lang="hu">Színésznő</p>
+      <p class="title t" lang="sv">Skådespelerska</p>
 
       <nav class="social-links" aria-label="Social links">
         <a href="https://www.youtube.com/watch?v=s2dcuFRDiwc" target="_blank" rel="noopener" aria-label="YouTube">
@@ -48,11 +50,65 @@
       </nav>
 
       <div class="bio">
-        <p>I am a musical theatre performer with over twenty years of stage experience. I started really young. &#x1F467;&#x1F3FC;</p>
-        <p>I spent more than a decade performing at Madách Theatre in Budapest, appearing in numerous productions including The Phantom of the Opera (Meg Giry).</p>
-        <p>I am now based in Sweden and open to musical theatre projects.</p>
+        <div class="t" lang="en">
+          <p>I am a musical theatre performer with over twenty years of stage experience. I started really young. &#x1F467;&#x1F3FC;</p>
+          <p>I spent more than a decade performing at Madách Theatre in Budapest, appearing in numerous productions including The Phantom of the Opera (Meg Giry).</p>
+          <p>I am now based in Sweden and open to musical theatre projects.</p>
+        </div>
+        <div class="t" lang="hu">
+          <p>Musical színésznő vagyok, több mint húsz év színpadi tapasztalattal. Nagyon fiatalon kezdtem. &#x1F467;&#x1F3FC;</p>
+          <p>Több mint egy évtizeden át játszottam a budapesti Madách Színházban, számos produkcióban, többek között Az Operaház Fantomjában (Meg Giry).</p>
+          <p>Jelenleg Svédországban élek, és nyitott vagyok musical projektekre.</p>
+        </div>
+        <div class="t" lang="sv">
+          <p>Jag är musikalartist med över tjugo års scenerfarenhet. Jag började väldigt ung. &#x1F467;&#x1F3FC;</p>
+          <p>Jag tillbringade mer än ett decennium på Madách-teatern i Budapest där jag medverkade i många produktioner, bland annat Fantomen på Operan (Meg Giry).</p>
+          <p>Jag bor nu i Sverige och är öppen för musikalteaterprojekt.</p>
+        </div>
+      </div>
+
+      <div class="lang-selector" aria-label="Language">
+        <button data-lang="en" aria-label="English">🇬🇧</button>
+        <button data-lang="hu" aria-label="Magyar">🇭🇺</button>
+        <button data-lang="sv" aria-label="Svenska">🇸🇪</button>
       </div>
     </section>
   </main>
+  <script>
+    (function () {
+      var langMap = { en: 'en-GB', hu: 'hu', sv: 'sv' };
+
+      function detect() {
+        var saved = localStorage.getItem('lang');
+        if (saved && langMap[saved]) return saved;
+        var langs = navigator.languages || [navigator.language || 'en'];
+        for (var i = 0; i < langs.length; i++) {
+          var code = langs[i].toLowerCase();
+          if (code.startsWith('hu')) return 'hu';
+          if (code.startsWith('sv')) return 'sv';
+          if (code.startsWith('en')) return 'en';
+        }
+        return 'en';
+      }
+
+      function apply(lang) {
+        document.documentElement.setAttribute('data-lang', lang);
+        document.documentElement.lang = langMap[lang];
+        document.querySelectorAll('.lang-selector button').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+      }
+
+      apply(detect());
+
+      document.querySelector('.lang-selector').addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-lang]');
+        if (!btn) return;
+        var lang = btn.getAttribute('data-lang');
+        localStorage.setItem('lang', lang);
+        apply(lang);
+      });
+    })();
+  </script>
 </body>
 </html>
